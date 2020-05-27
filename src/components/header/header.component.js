@@ -7,7 +7,10 @@ import './header.styles.scss'
 
 import { auth } from '../../firebase/firebase.utils'
 
-const Header = ({ currentUser }) => {
+import CartIcon from '../cart-icon/cart-icon.component'
+import CartDropdown from '../cart-dropdown/cart-dropdown.component'
+
+const Header = ({ currentUser, hiddenCart }) => {
     return (
         <div className='header'>
             <Link className='logo-container' to='/'>
@@ -26,14 +29,19 @@ const Header = ({ currentUser }) => {
                         :
                         <Link className='option' to='/signin'>SIGN IN</Link>
                 }
+                <CartIcon />
             </div>
+            {
+                !hiddenCart ?
+                    (<CartDropdown />) : null
+            }
         </div>
     )
 }
 
-//State argument is the root reducer state
-const mapStateToProps = state => ({
-    currentUser: state.user.currentUser
+const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
+    currentUser,
+    hiddenCart: hidden
 })
 
-export default connect(mapStateToProps)(Header)
+export default connect(mapStateToProps, null)(Header)
