@@ -12,6 +12,15 @@ const config = {
     appId: "1:952723210001:web:1225bbdece208612ced6b0"
 }
 
+export const getCurrentUser = () => {
+    return new Promise((resolve,reject)=>{
+        const unsuscribe = auth.onAuthStateChanged(userAuth => {
+            unsuscribe()
+            resolve(userAuth)
+        }, reject)
+    })
+}
+
 export const createUserProfileDocument = async (userAuth, additionalData) => {
     if (!userAuth) return;
     const userRef = firestore.doc(`users/${userAuth.uid}`)
@@ -67,8 +76,7 @@ firebase.initializeApp(config)
 export const auth = firebase.auth()
 export const firestore = firebase.firestore()
 
-const provider = new firebase.auth.GoogleAuthProvider()
-provider.setCustomParameters({ prompt: 'select_account' })
-export const signInWithGoogle = () => auth.signInWithPopup(provider)
+export const googleProvider = new firebase.auth.GoogleAuthProvider()
+googleProvider.setCustomParameters({ prompt: 'select_account' })
 
 export default firebase
